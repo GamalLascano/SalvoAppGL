@@ -1,4 +1,4 @@
-package com.codeoftheweb.salvo;
+package test;
 
 public class Person {
     private String nombre;
