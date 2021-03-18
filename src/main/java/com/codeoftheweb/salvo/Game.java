@@ -2,11 +2,13 @@ package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Game {
@@ -15,7 +17,8 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private LocalDateTime creationDate;
-
+    @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
+    Set<GamePlayer> gamePlayers;
     public Game() {
     }
 
@@ -25,5 +28,24 @@ public class Game {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public List<Player> getPlayers(){
+        return gamePlayers.stream().map(pla -> pla.getPlayerID()).collect(Collectors.toList());
+    }
+    public void addGamePlayers(GamePlayer gamePla) {
+        gamePlayers.add(gamePla);
+    }
+
+    public long getId() {
+        return id;
+    }
+    public Map<String,Object> toDTO(){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id",this.id);
+        dto.put("created",this.creationDate);
+        List<Object> aux = gamePlayers.stream().map(a -> a.toGPDTO()).collect(Collectors.toList());
+        dto.put("gamePlayers",aux);
+        return dto;
     }
 }

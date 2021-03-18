@@ -1,11 +1,14 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Player {
@@ -15,7 +18,8 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String userName;
-
+    @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
+    Set<GamePlayer> gamePlayers;
     public Player() {
     }
 
@@ -27,7 +31,18 @@ public class Player {
         return userName;
     }
 
-    public String toString() {
-        return "Nombre: " + userName + " Id: " + id;
+    public void addGamePlayers(GamePlayer gamePla) {
+        gamePlayers.add(gamePla);
     }
+    @JsonIgnore
+    public List<Game> getGames(){
+        return gamePlayers.stream().map(pla -> pla.getGameID()).collect(Collectors.toList());
+    }
+    public Map<String,Object> toPlayerDTO(){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id",this.id);
+        dto.put("email",this.userName);
+        return dto;
+    }
+
 }
