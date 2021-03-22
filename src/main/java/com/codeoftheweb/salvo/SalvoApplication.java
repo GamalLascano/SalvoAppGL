@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @SpringBootApplication
 public class SalvoApplication {
@@ -26,7 +25,6 @@ public class SalvoApplication {
 			repository1.save(p3);
 			repository1.save(p4);
 			// save a couple of games
-			//LocalDateTime actualDateTime = LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"));
 			LocalDateTime actualDateTime=LocalDateTime.of(2018, 2, 17, 15, 20,15);
 			Game[] gameList = new Game[6];
 			for(int i=0;i<=5;i++){

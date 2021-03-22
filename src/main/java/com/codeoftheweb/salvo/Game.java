@@ -18,7 +18,7 @@ public class Game {
     private long id;
     private LocalDateTime creationDate;
     @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
-    Set<GamePlayer> gamePlayers;
+    Set<GamePlayer> players;
     public Game() {
     }
 
@@ -31,10 +31,10 @@ public class Game {
     }
 
     public List<Player> getPlayers(){
-        return gamePlayers.stream().map(pla -> pla.getPlayerID()).collect(Collectors.toList());
+        return players.stream().map(pla -> pla.getPlayerID()).collect(Collectors.toList());
     }
     public void addGamePlayers(GamePlayer gamePla) {
-        gamePlayers.add(gamePla);
+        players.add(gamePla);
     }
 
     public long getId() {
@@ -44,7 +44,7 @@ public class Game {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id",this.id);
         dto.put("created",this.creationDate);
-        List<Object> aux = gamePlayers.stream().map(a -> a.toGPDTO()).collect(Collectors.toList());
+        List<Object> aux = players.stream().map(a -> a.toGPDTO()).collect(Collectors.toList());
         dto.put("gamePlayers",aux);
         return dto;
     }

@@ -19,7 +19,7 @@ public class Player {
     private long id;
     private String userName;
     @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
-    Set<GamePlayer> gamePlayers;
+    Set<GamePlayer> games;
     public Player() {
     }
 
@@ -32,11 +32,11 @@ public class Player {
     }
 
     public void addGamePlayers(GamePlayer gamePla) {
-        gamePlayers.add(gamePla);
+        games.add(gamePla);
     }
     @JsonIgnore
     public List<Game> getGames(){
-        return gamePlayers.stream().map(pla -> pla.getGameID()).collect(Collectors.toList());
+        return games.stream().map(pla -> pla.getGameID()).collect(Collectors.toList());
     }
     public Map<String,Object> toPlayerDTO(){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
