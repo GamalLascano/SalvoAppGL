@@ -1,13 +1,12 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.player;
 
+import com.codeoftheweb.salvo.game.Game;
+import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -19,7 +18,7 @@ public class Player {
     private long id;
     private String userName;
     @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
-    Set<GamePlayer> games;
+    Set<GamePlayer> games = new HashSet<>();
     public Player() {
     }
 

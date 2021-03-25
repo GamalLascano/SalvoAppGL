@@ -1,13 +1,12 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.game;
 
+import com.codeoftheweb.salvo.gameplayer.GamePlayer;
+import com.codeoftheweb.salvo.player.Player;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -18,7 +17,7 @@ public class Game {
     private long id;
     private LocalDateTime creationDate;
     @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
-    Set<GamePlayer> players;
+    Set<GamePlayer> players= new HashSet<>();;
     public Game() {
     }
 
