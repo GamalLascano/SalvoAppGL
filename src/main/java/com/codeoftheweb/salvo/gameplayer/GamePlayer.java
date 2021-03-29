@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo.gameplayer;
 
 import com.codeoftheweb.salvo.player.Player;
 import com.codeoftheweb.salvo.game.Game;
+import com.codeoftheweb.salvo.salvo.Salvo;
 import com.codeoftheweb.salvo.ship.Ship;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,8 +26,11 @@ public class GamePlayer {
     private Player playerID;
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
     private Set<Ship> ships;
+    @OneToMany(mappedBy="gamePlayerID", fetch=FetchType.EAGER)
+    private Set<Salvo> salvos;
     public GamePlayer() {
         this.ships = new HashSet<>();
+        this.salvos = new HashSet<>();
     }
 
     public GamePlayer(LocalDateTime creationDate, Game gameID, Player playerID) {
@@ -45,6 +49,14 @@ public class GamePlayer {
 
     public Player getPlayerID() {
         return playerID;
+    }
+
+    public Set<Salvo> getSalvos() {
+        return salvos;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public Map<String,Object> toGPDTO(){

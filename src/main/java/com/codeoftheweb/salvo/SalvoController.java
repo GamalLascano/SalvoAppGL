@@ -43,6 +43,7 @@ public class SalvoController {
     private Map<String, Object> getMap(Long gamePlayerId){
         Map<String, Object> datazo = gamePlayerRepository.getOne(gamePlayerId).getGameID().toDTO();
         datazo.put("ships",gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(a -> a.toShipDTO()).collect(Collectors.toList()));
+        datazo.put("salvoes",gamePlayerRepository.getOne(gamePlayerId).getGameID().toSalvoDTO());
         return datazo;
     }
 }

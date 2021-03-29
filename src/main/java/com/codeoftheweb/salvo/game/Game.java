@@ -47,4 +47,8 @@ public class Game {
         dto.put("gamePlayers",aux);
         return dto;
     }
+    public List<Object> toSalvoDTO(){
+        List<Object> aux = players.stream().flatMap(a -> a.getSalvos().stream().map(b ->b.toFinalSalvoDTO())).collect(Collectors.toList());
+        return aux;
+    }
 }

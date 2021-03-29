@@ -1,3 +1,19 @@
+.ship-piece{
+    background-color: mediumpurple;
+}
+
+.ship-piece-hited{
+    background-color: darkmagenta;
+}
+
+.salvo{
+
+}
+
+.salvo-piece{
+    background-color: crimson;
+}
+
 table,
 td {
     border: 1px solid #333;
