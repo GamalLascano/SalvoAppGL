@@ -34,12 +34,12 @@ public class Score {
         this.playerID = playerID;
         this.score = score;
     }
-/*    public Map<String,Object> toScoreDTO(){
+    public Map<String,Object> toScoreDTO(){
         Map<String,Object> aux = new LinkedHashMap<String, Object>();
         aux.put("score",score);
-        aux.put("playerID",playerID.getId());
+        aux.put("player",playerID.getId());
         return aux;
-    }*/
+    }
     public Game getGame() {
         return gameID;
     }

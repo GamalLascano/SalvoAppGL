@@ -40,7 +40,7 @@ public class Player {
     public Optional<Score> getScore(Game gamePar){
         return scores.stream().filter(a -> a.getGame().equals(gamePar)).findFirst();
     }
-    public Map<String,Object> makeScores(){
+/*    public Map<String,Object> makeScores(){
         Map<String,Object> res = new LinkedHashMap<String, Object>();
         int win=(int)scores.stream().filter(a->a.getScore()==1.0).count();
         int loss=(int)scores.stream().filter(a->a.getScore()==0).count();
@@ -51,7 +51,7 @@ public class Player {
         res.put("draws",draw);
         res.put("total",count);
         return res;
-    }
+    }*/
     public void addGamePlayers(GamePlayer gamePla) {
         games.add(gamePla);
     }
@@ -63,7 +63,6 @@ public class Player {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id",this.id);
         dto.put("email",this.userName);
-        dto.put("score",this.makeScores());
         return dto;
     }
 

@@ -53,6 +53,10 @@ public class Game {
         dto.put("created",this.creationDate);
         List<Object> aux = players.stream().map(a -> a.toGPDTO()).collect(Collectors.toList());
         dto.put("gamePlayers",aux);
+        List<Map<String, Object>> scores = players.stream()
+                .map(gp -> gp.getScore()).filter(score -> score.isPresent()).map(score -> score.get().toScoreDTO())
+                .collect(Collectors.toList());
+        dto.put("scores", scores);
         return dto;
     }
     public List<Object> toSalvoDTO(){

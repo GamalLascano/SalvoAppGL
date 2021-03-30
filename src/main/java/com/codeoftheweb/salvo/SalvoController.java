@@ -24,8 +24,10 @@ public class SalvoController {
     @Autowired
     public GamePlayerRepository gamePlayerRepository;
     @RequestMapping("/games")
-    public List<Object>getGameID(){
-        return gameRepository.findAll().stream().map(game -> game.toDTO()).collect(Collectors.toList());
+    public Map<String, Object>getGameID(){
+        Map<String, Object> aux = new LinkedHashMap<>();
+        aux.put("games",gameRepository.findAll().stream().map(game -> game.toDTO()).collect(Collectors.toList()));
+        return aux;
     }
     @RequestMapping("/game_view/{gamePlayerId}")
     public ResponseEntity<Map<String, Object>> findOwner(@PathVariable Long gamePlayerId) {
