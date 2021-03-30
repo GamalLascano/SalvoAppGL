@@ -3,13 +3,14 @@ package com.codeoftheweb.salvo.gameplayer;
 import com.codeoftheweb.salvo.player.Player;
 import com.codeoftheweb.salvo.game.Game;
 import com.codeoftheweb.salvo.salvo.Salvo;
+import com.codeoftheweb.salvo.score.Score;
 import com.codeoftheweb.salvo.ship.Ship;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class GamePlayer {
@@ -59,11 +60,17 @@ public class GamePlayer {
         return id;
     }
 
+    public Optional<Score> getScore(){
+        return gameID.getScores().stream().filter(a-> a.getPlayer().getId() == this.playerID.getId()).findFirst();
+    }
     public Map<String,Object> toGPDTO(){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id",this.id);
         Map<String, Object> aux = this.playerID.toPlayerDTO();
         dto.put("player",aux);
+        if (this.getScore().isPresent()){
+            dto.put("score",this.getScore().get().getScore());
+        }
         return dto;
     }
 }

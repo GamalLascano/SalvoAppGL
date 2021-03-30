@@ -2,6 +2,8 @@ package com.codeoftheweb.salvo.game;
 
 import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.codeoftheweb.salvo.player.Player;
+import com.codeoftheweb.salvo.score.Score;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,7 +19,9 @@ public class Game {
     private long id;
     private LocalDateTime creationDate;
     @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
-    Set<GamePlayer> players= new HashSet<>();;
+    private Set<GamePlayer> players= new HashSet<>();
+    @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
+    private Set<Score> scores= new HashSet<>();
     public Game() {
     }
 
@@ -34,6 +38,10 @@ public class Game {
     }
     public void addGamePlayers(GamePlayer gamePla) {
         players.add(gamePla);
+    }
+
+    public Set<Score> getScores() {
+        return scores;
     }
 
     public long getId() {
