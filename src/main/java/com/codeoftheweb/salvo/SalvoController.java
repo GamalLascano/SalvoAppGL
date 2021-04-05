@@ -3,12 +3,17 @@ package com.codeoftheweb.salvo;
 import com.codeoftheweb.salvo.game.GameRepository;
 import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.codeoftheweb.salvo.gameplayer.GamePlayerRepository;
+import com.codeoftheweb.salvo.player.Player;
+import com.codeoftheweb.salvo.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,11 +28,24 @@ public class SalvoController {
     public GameRepository gameRepository;
     @Autowired
     public GamePlayerRepository gamePlayerRepository;
+    @Autowired
+    public PlayerRepository playerRepository;
     @RequestMapping("/games")
-    public Map<String, Object>getGameID(){
+    public Map<String, Object>getGameID(Authentication authentication){
         Map<String, Object> aux = new LinkedHashMap<>();
+        aux.put("player",retPlayer(authentication));
         aux.put("games",gameRepository.findAll().stream().map(game -> game.toDTO()).collect(Collectors.toList()));
         return aux;
+    }
+    private Map<String,Object> retPlayer(Authentication authentication){
+        if(!isGuest(authentication)){
+            return playerRepository.findByUserName(authentication.getName()).toPlayerDTO();
+        }else{
+            return null;
+        }
+    }
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
     @RequestMapping("/game_view/{gamePlayerId}")
     public ResponseEntity<Map<String, Object>> findOwner(@PathVariable Long gamePlayerId) {
@@ -41,6 +59,24 @@ public class SalvoController {
             response =new ResponseEntity<>(aux,HttpStatus.UNAUTHORIZED);
         }
         return response;
+    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String username, @RequestParam String password) {
+
+        if (username.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByUserName(username) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        playerRepository.save(new Player(username, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
     private Map<String, Object> getMap(Long gamePlayerId){
         Map<String, Object> datazo = gamePlayerRepository.getOne(gamePlayerId).getGameID().toDTO();

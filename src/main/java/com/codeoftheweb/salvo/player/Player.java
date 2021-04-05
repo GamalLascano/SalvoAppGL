@@ -5,6 +5,8 @@ import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.codeoftheweb.salvo.score.Score;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.*;
@@ -22,11 +24,17 @@ public class Player {
     Set<GamePlayer> games = new HashSet<>();
     @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
     Set<Score> scores= new HashSet<>();
+    private String password;
     public Player() {
     }
 
     public Player(String user) {
         this.userName = user;
+    }
+
+    public Player(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
     }
 
     public String getUserName() {
@@ -35,6 +43,14 @@ public class Player {
 
     public long getId() {
         return id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Optional<Score> getScore(Game gamePar){
