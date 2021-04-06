@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.codeoftheweb.salvo.game.Game;
 import com.codeoftheweb.salvo.game.GameRepository;
 import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.codeoftheweb.salvo.gameplayer.GamePlayerRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,48 @@ public class SalvoController {
         aux.put("games",gameRepository.findAll().stream().map(game -> game.toDTO()).collect(Collectors.toList()));
         return aux;
     }
+    @PostMapping("/games")
+    public ResponseEntity<Map<String, Object>> createNewGame(Authentication authentication){
+        ResponseEntity<Map<String, Object>> response;
+        if(!isGuest(authentication)){
+                Player p = playerRepository.findByUserName(authentication.getName());
+                LocalDateTime ldt = LocalDateTime.now();
+                Game g = new Game(ldt);
+                GamePlayer gp = new GamePlayer(ldt,g,p);
+                gameRepository.save(g);
+                gamePlayerRepository.save(gp);
+                response = new ResponseEntity<>(makeMap("gpid",gp.getId()),HttpStatus.OK);
+        }else{
+            response = new ResponseEntity<>(makeMap("error","User is not logged in"), HttpStatus.UNAUTHORIZED);
+        }
+        return response;
+    }
+    @PostMapping("/game/{gameId}/players")
+    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long gameId,Authentication authentication){
+        ResponseEntity<Map<String, Object>> response;
+        if(!isGuest(authentication)){
+            Optional<Game> game = gameRepository.findById(gameId);
+            if(game.isPresent()){
+                if(game.get().getPlayers().stream().count()<2){
+                    GamePlayer gp = new GamePlayer(LocalDateTime.now(),game.get(),playerRepository.findByUserName(authentication.getName()));
+                    gamePlayerRepository.save(gp);
+                    response = new ResponseEntity<>(makeMap("gpid",gp.getId()),HttpStatus.OK);
+                }else{
+                    response = new ResponseEntity<>(makeMap("error","Game is full"), HttpStatus.FORBIDDEN);
+                }
+            }else{
+                response = new ResponseEntity<>(makeMap("error","No such game"), HttpStatus.FORBIDDEN);
+            }
+        }else{
+            response = new ResponseEntity<>(makeMap("error","User is not logged in"), HttpStatus.UNAUTHORIZED);
+        }
+        return response;
+    }
+    private Map<String, Object> makeMap(String s, Object o){
+        Map<String, Object> aux = new LinkedHashMap<>();
+        aux.put(s,o);
+        return aux;
+    }
     private Map<String,Object> retPlayer(Authentication authentication){
         if(!isGuest(authentication)){
             return playerRepository.findByUserName(authentication.getName()).toPlayerDTO();
@@ -48,11 +92,15 @@ public class SalvoController {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
     @RequestMapping("/game_view/{gamePlayerId}")
-    public ResponseEntity<Map<String, Object>> findOwner(@PathVariable Long gamePlayerId) {
+    public ResponseEntity<Map<String, Object>> findOwner(@PathVariable Long gamePlayerId,Authentication authentication) {
         Optional<GamePlayer> gp=gamePlayerRepository.findById(gamePlayerId);
         ResponseEntity<Map<String, Object>> response;
         if(gp.isPresent()){
-            response=new ResponseEntity<>(getMap(gamePlayerId), HttpStatus.OK);
+            if (authentication.getName().compareTo(gp.get().getPlayerID().getUserName())==0){
+                response=new ResponseEntity<>(getMap(gamePlayerId), HttpStatus.OK);
+            }else{
+                response =new ResponseEntity<>(makeMap("problem","Player is not authorized"),HttpStatus.UNAUTHORIZED);
+            }
         }else{
             Map<String, Object> aux = new LinkedHashMap<String, Object>();
             aux.put("problem","gamePlayer doesn´t exist");
