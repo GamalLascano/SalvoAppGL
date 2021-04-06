@@ -33,7 +33,7 @@ public class SalvoController {
     @RequestMapping("/games")
     public Map<String, Object>getGameID(Authentication authentication){
         Map<String, Object> aux = new LinkedHashMap<>();
-        aux.put("player",retPlayer(authentication));
+        aux.put("player",retPlayer(authentication)==null ? "Guest":retPlayer(authentication));
         aux.put("games",gameRepository.findAll().stream().map(game -> game.toDTO()).collect(Collectors.toList()));
         return aux;
     }

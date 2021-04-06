@@ -1,9 +1,22 @@
 $(function() {
-    loadData()
+      $("#logout-btn").hide();
+  loadData();
+  $("#login-btn").click(function(){
+    login();
+  });
+  $("#logout-btn").click(function(){
+    logout();
+  });
 });
 
+
 function updateViewGames(data) {
-  var htmlList = data.map(function (game) {
+    user  =   data.player;
+        if(user  != "Guest"){
+            $("#user-info").text("Welcome " +    user.email);
+            showLogin(false);
+        }
+  var htmlList = data.games.map(function (game) {
       return  '<li class="list-group-item">' + new Date(game.created).toLocaleString() + ' ' + game.gamePlayers.map(function(element) { return element.player.email}).join(', ')  +'</li>';
   }).join('');
   document.getElementById("game-list").innerHTML = htmlList;
@@ -21,9 +34,10 @@ function updateViewLBoard(data) {
 }
 
 function loadData() {
+
   $.get("/api/games")
     .done(function(data) {
-      updateViewGames(data.games);
+      updateViewGames(data);
     })
     .fail(function( jqXHR, textStatus ) {
       alert( "Failed: " + textStatus );
@@ -31,10 +45,37 @@ function loadData() {
   
   $.get("/api/leaderBoard")
     .done(function(data) {
-        console.log(data)
       updateViewLBoard(data);
     })
     .fail(function( jqXHR, textStatus ) {
       alert( "Failed: " + textStatus );
     });
+}
+
+function login(){
+  $.post("/api/login", { name: $("#username").val(), pwd: $("#password").val()})
+    .done(function() {
+        console.log("successful login!!")
+        loadData(),
+      showLogin(false);
+    });
+}
+
+function logout(){
+  $.post("/api/logout")
+    .done(function() {
+      console.log("successful logout!!")
+      showLogin(true);
+    });
+}
+
+function showLogin(show){
+  if(show){
+    $("#login-panel").show();
+    $("#user-panel").hide();
+  } else {
+        $("#logout-btn").show();
+    $("#login-panel").hide();
+    $("#user-panel").show();
+  }
 }
