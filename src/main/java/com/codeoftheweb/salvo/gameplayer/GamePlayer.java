@@ -20,15 +20,16 @@ public class GamePlayer {
     private long id;
     private LocalDateTime creationDate;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="game_id")
+    @JoinColumn(name = "game_id")
     private Game gameID;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="player_id")
+    @JoinColumn(name = "player_id")
     private Player playerID;
-    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
     private Set<Ship> ships;
-    @OneToMany(mappedBy="gamePlayerID", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayerID", fetch = FetchType.EAGER)
     private Set<Salvo> salvos;
+
     public GamePlayer() {
         this.ships = new HashSet<>();
         this.salvos = new HashSet<>();
@@ -60,16 +61,17 @@ public class GamePlayer {
         return id;
     }
 
-    public Optional<Score> getScore(){
-        return gameID.getScores().stream().filter(a-> a.getPlayer().getId() == this.playerID.getId()).findFirst();
+    public Optional<Score> getScore() {
+        return gameID.getScores().stream().filter(a -> a.getPlayer().getId() == this.playerID.getId()).findFirst();
     }
-    public Map<String,Object> toGPDTO(){
+
+    public Map<String, Object> toGPDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id",this.id);
+        dto.put("id", this.id);
         Map<String, Object> aux = this.playerID.toPlayerDTO();
-        dto.put("player",aux);
-        if (this.getScore().isPresent()){
-            dto.put("score",this.getScore().get().getScore());
+        dto.put("player", aux);
+        if (this.getScore().isPresent()) {
+            dto.put("score", this.getScore().get().getScore());
         }
         return dto;
     }

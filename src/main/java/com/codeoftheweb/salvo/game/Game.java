@@ -18,10 +18,11 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private LocalDateTime creationDate;
-    @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
-    private Set<GamePlayer> players= new HashSet<>();
-    @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
-    private Set<Score> scores= new HashSet<>();
+    @OneToMany(mappedBy = "gameID", fetch = FetchType.EAGER)
+    private Set<GamePlayer> players = new HashSet<>();
+    @OneToMany(mappedBy = "gameID", fetch = FetchType.EAGER)
+    private Set<Score> scores = new HashSet<>();
+
     public Game() {
     }
 
@@ -33,9 +34,10 @@ public class Game {
         return creationDate;
     }
 
-    public List<Player> getPlayers(){
+    public List<Player> getPlayers() {
         return players.stream().map(pla -> pla.getPlayerID()).collect(Collectors.toList());
     }
+
     public void addGamePlayers(GamePlayer gamePla) {
         players.add(gamePla);
     }
@@ -47,20 +49,22 @@ public class Game {
     public long getId() {
         return id;
     }
-    public Map<String,Object> toDTO(){
+
+    public Map<String, Object> toDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id",this.id);
-        dto.put("created",this.creationDate);
+        dto.put("id", this.id);
+        dto.put("created", this.creationDate);
         List<Object> aux = players.stream().map(a -> a.toGPDTO()).collect(Collectors.toList());
-        dto.put("gamePlayers",aux);
+        dto.put("gamePlayers", aux);
         List<Map<String, Object>> scores = players.stream()
                 .map(gp -> gp.getScore()).filter(score -> score.isPresent()).map(score -> score.get().toScoreDTO())
                 .collect(Collectors.toList());
         dto.put("scores", scores);
         return dto;
     }
-    public List<Object> toSalvoDTO(){
-        List<Object> aux = players.stream().flatMap(a -> a.getSalvos().stream().map(b ->b.toFinalSalvoDTO())).collect(Collectors.toList());
+
+    public List<Object> toSalvoDTO() {
+        List<Object> aux = players.stream().flatMap(a -> a.getSalvos().stream().map(b -> b.toFinalSalvoDTO())).collect(Collectors.toList());
         return aux;
     }
 }

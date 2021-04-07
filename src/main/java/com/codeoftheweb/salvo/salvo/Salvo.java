@@ -16,12 +16,13 @@ public class Salvo {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="gamePlayer_id")
+    @JoinColumn(name = "gamePlayer_id")
     private GamePlayer gamePlayerID;
     private int turn;
     @ElementCollection
-    @Column(name="cell")
+    @Column(name = "cell")
     private Set<String> salvoLocations;
+
     public Salvo() {
         salvoLocations = new HashSet<>();
     }
@@ -44,11 +45,12 @@ public class Salvo {
     public Set<String> getSalvoLocations() {
         return salvoLocations;
     }
-    public Map<String, Object> toFinalSalvoDTO(){
+
+    public Map<String, Object> toFinalSalvoDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("turn",turn);
-        dto.put("player",gamePlayerID.getPlayerID().getId());
-        dto.put("locations",salvoLocations);
+        dto.put("turn", turn);
+        dto.put("player", gamePlayerID.getPlayerID().getId());
+        dto.put("locations", salvoLocations);
         return dto;
     }
 }

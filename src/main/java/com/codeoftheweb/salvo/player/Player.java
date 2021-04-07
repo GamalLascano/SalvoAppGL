@@ -20,11 +20,12 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String userName;
-    @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "playerID", fetch = FetchType.EAGER)
     Set<GamePlayer> games = new HashSet<>();
-    @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
-    Set<Score> scores= new HashSet<>();
+    @OneToMany(mappedBy = "playerID", fetch = FetchType.EAGER)
+    Set<Score> scores = new HashSet<>();
     private String password;
+
     public Player() {
     }
 
@@ -53,32 +54,35 @@ public class Player {
         this.password = password;
     }
 
-    public Optional<Score> getScore(Game gamePar){
+    public Optional<Score> getScore(Game gamePar) {
         return scores.stream().filter(a -> a.getGame().equals(gamePar)).findFirst();
     }
-/*    public Map<String,Object> makeScores(){
-        Map<String,Object> res = new LinkedHashMap<String, Object>();
-        int win=(int)scores.stream().filter(a->a.getScore()==1.0).count();
-        int loss=(int)scores.stream().filter(a->a.getScore()==0).count();
-        int draw=(int)scores.stream().filter(a->a.getScore()==0.5).count();
-        double count = scores.stream().mapToDouble(Score::getScore).sum();
-        res.put("wins",win);
-        res.put("losses",loss);
-        res.put("draws",draw);
-        res.put("total",count);
-        return res;
-    }*/
+
+    /*    public Map<String,Object> makeScores(){
+            Map<String,Object> res = new LinkedHashMap<String, Object>();
+            int win=(int)scores.stream().filter(a->a.getScore()==1.0).count();
+            int loss=(int)scores.stream().filter(a->a.getScore()==0).count();
+            int draw=(int)scores.stream().filter(a->a.getScore()==0.5).count();
+            double count = scores.stream().mapToDouble(Score::getScore).sum();
+            res.put("wins",win);
+            res.put("losses",loss);
+            res.put("draws",draw);
+            res.put("total",count);
+            return res;
+        }*/
     public void addGamePlayers(GamePlayer gamePla) {
         games.add(gamePla);
     }
+
     @JsonIgnore
-    public List<Game> getGames(){
+    public List<Game> getGames() {
         return games.stream().map(pla -> pla.getGameID()).collect(Collectors.toList());
     }
-    public Map<String,Object> toPlayerDTO(){
+
+    public Map<String, Object> toPlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id",this.id);
-        dto.put("email",this.userName);
+        dto.put("id", this.id);
+        dto.put("email", this.userName);
         return dto;
     }
 

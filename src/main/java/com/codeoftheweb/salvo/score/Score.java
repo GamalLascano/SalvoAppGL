@@ -17,10 +17,10 @@ public class Score {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="game_id")
+    @JoinColumn(name = "game_id")
     private Game gameID;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="player_id")
+    @JoinColumn(name = "player_id")
     private Player playerID;
     private double score;
     private LocalDateTime finishDate;
@@ -34,12 +34,14 @@ public class Score {
         this.playerID = playerID;
         this.score = score;
     }
-    public Map<String,Object> toScoreDTO(){
-        Map<String,Object> aux = new LinkedHashMap<String, Object>();
-        aux.put("score",score);
-        aux.put("player",playerID.getId());
+
+    public Map<String, Object> toScoreDTO() {
+        Map<String, Object> aux = new LinkedHashMap<String, Object>();
+        aux.put("score", score);
+        aux.put("player", playerID.getId());
         return aux;
     }
+
     public Game getGame() {
         return gameID;
     }

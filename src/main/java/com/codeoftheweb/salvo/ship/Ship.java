@@ -43,6 +43,17 @@ public class Ship {
         dto.put("locations",this.shipLocations);
         return dto;
     }
+
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }
+
+    public Ship(ShipType shipType, Set<String> shipLocations) {
+        this();
+        this.shipType = shipType;
+        this.shipLocations = shipLocations;
+    }
+
     public Set<String> getShipLocations() {
         return shipLocations;
     }
