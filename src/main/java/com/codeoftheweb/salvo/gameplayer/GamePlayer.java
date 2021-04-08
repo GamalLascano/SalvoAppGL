@@ -40,7 +40,12 @@ public class GamePlayer {
         this.gameID = gameID;
         this.playerID = playerID;
     }
-
+    public boolean HasSalvo(Salvo salvo){
+        for(Salvo salvoInList : salvos){
+            if(salvoInList.getTurn() == salvo.getTurn())return true;
+        }
+        return false;
+    }
     public Set<Ship> getShips() {
         return ships;
     }

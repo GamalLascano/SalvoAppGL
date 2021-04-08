@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class SalvoController {
+public class AppController {
 
     @Autowired
     public GamePlayerRepository gamePlayerRepository;

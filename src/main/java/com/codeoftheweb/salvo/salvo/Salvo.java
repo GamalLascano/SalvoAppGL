@@ -42,6 +42,10 @@ public class Salvo {
         return turn;
     }
 
+    public void setNewGamePlayer(GamePlayer gamePlayerID) {
+        this.gamePlayerID = gamePlayerID;
+    }
+
     public Set<String> getSalvoLocations() {
         return salvoLocations;
     }
@@ -53,4 +57,5 @@ public class Salvo {
         dto.put("locations", salvoLocations);
         return dto;
     }
+
 }
