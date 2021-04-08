@@ -37,9 +37,14 @@ public class AppController {
     }
 
     private Map<String, Object> getMap(Long gamePlayerId) {
+        Map<String, Object> hits  = new LinkedHashMap<String, Object>();
+        hits.put("self",new ArrayList<>());
+        hits.put("opponent",new ArrayList<>());
         Map<String, Object> datazo = gamePlayerRepository.getOne(gamePlayerId).getGameID().toDTO();
         datazo.put("ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(a -> a.toShipDTO()).collect(Collectors.toList()));
         datazo.put("salvoes", gamePlayerRepository.getOne(gamePlayerId).getGameID().toSalvoDTO());
+        datazo.put("gameState", "PLACESHIPS");
+        datazo.put("hits",hits);
         return datazo;
     }
 }

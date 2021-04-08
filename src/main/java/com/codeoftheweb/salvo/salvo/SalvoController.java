@@ -37,9 +37,9 @@ public class SalvoController {
                     if(!gp.get().HasSalvo(salvo)){
                         salvo.setNewGamePlayer(gp.get());
                         salvoRepository.save(salvo);
-                        response = new ResponseEntity<>(Utils.makeMap("Success", "Salvo placed"), HttpStatus.CREATED);
+                        response = new ResponseEntity<>(Utils.makeMap("OK", "Salvo placed"), HttpStatus.CREATED);
                     }else{
-                        response = new ResponseEntity<>(Utils.makeMap("problem", "Salvos are already placed this turn"), HttpStatus.FORBIDDEN);
+                        response = new ResponseEntity<>(Utils.makeMap("error", "Salvos are already placed this turn"), HttpStatus.FORBIDDEN);
                     }
                 }else{
                     response = new ResponseEntity<>(Utils.makeMap("error", "Player is not authorized"), HttpStatus.UNAUTHORIZED);

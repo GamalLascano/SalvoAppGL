@@ -37,9 +37,9 @@ public class ShipController {
                             s.setGamePlayer(gp.get());
                             shipRepository.save(s);
                         });
-                        response = new ResponseEntity<>(Utils.makeMap("Success", "Ships placed"), HttpStatus.CREATED);
+                        response = new ResponseEntity<>(Utils.makeMap("OK", "Ships placed"), HttpStatus.CREATED);
                     }else{
-                        response = new ResponseEntity<>(Utils.makeMap("problem", "Ships are already placed"), HttpStatus.FORBIDDEN);
+                        response = new ResponseEntity<>(Utils.makeMap("error", "Ships are already placed"), HttpStatus.FORBIDDEN);
                     }
                 }else{
                     response = new ResponseEntity<>(Utils.makeMap("error", "Player is not authorized"), HttpStatus.UNAUTHORIZED);

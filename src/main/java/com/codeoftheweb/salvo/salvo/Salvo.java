@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo.salvo;
 
 import com.codeoftheweb.salvo.gameplayer.GamePlayer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -21,17 +22,18 @@ public class Salvo {
     private int turn;
     @ElementCollection
     @Column(name = "cell")
-    private Set<String> salvoLocations;
+    @JsonProperty("locations")
+    private Set<String> locations;
 
     public Salvo() {
-        salvoLocations = new HashSet<>();
+        locations = new HashSet<>();
     }
 
     public Salvo(GamePlayer gamePlayerID, int turn, Set<String> salvoLocations) {
         this();
         this.gamePlayerID = gamePlayerID;
         this.turn = turn;
-        this.salvoLocations = salvoLocations;
+        this.locations = salvoLocations;
     }
 
     public GamePlayer getGamePlayerID() {
@@ -47,14 +49,14 @@ public class Salvo {
     }
 
     public Set<String> getSalvoLocations() {
-        return salvoLocations;
+        return locations;
     }
 
     public Map<String, Object> toFinalSalvoDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", turn);
         dto.put("player", gamePlayerID.getPlayerID().getId());
-        dto.put("locations", salvoLocations);
+        dto.put("locations", locations);
         return dto;
     }
 
