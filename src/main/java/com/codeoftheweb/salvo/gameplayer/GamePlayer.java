@@ -25,9 +25,9 @@ public class GamePlayer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id")
     private Player playerID;
-    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Ship> ships;
-    @OneToMany(mappedBy = "gamePlayerID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayerID", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Salvo> salvos;
 
     public GamePlayer() {

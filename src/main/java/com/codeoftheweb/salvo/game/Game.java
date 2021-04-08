@@ -18,9 +18,9 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private LocalDateTime creationDate;
-    @OneToMany(mappedBy = "gameID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gameID", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<GamePlayer> players = new HashSet<>();
-    @OneToMany(mappedBy = "gameID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gameID", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Score> scores = new HashSet<>();
 
     public Game() {
