@@ -94,7 +94,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
             repository3.save(new GamePlayer(actualDateTime, gameList[4], p1));
             //Partida 6
             repository3.save(new GamePlayer(actualDateTime, gameList[5], p4));
-            Ship nave1 = repository4.save(new Ship(gp1, ShipType.DESTROYER, new HashSet(Arrays.asList("H2", "H3", "H4"))));
+/*            Ship nave1 = repository4.save(new Ship(gp1, ShipType.DESTROYER, new HashSet(Arrays.asList("H2", "H3", "H4"))));
             Ship nave2 = repository4.save(new Ship(gp1, ShipType.SUBMARINE, new HashSet(Arrays.asList("E1", "F1", "G1"))));
             Ship nave3 = repository4.save(new Ship(gp1, ShipType.PATROL_BOAT, new HashSet(Arrays.asList("B4", "B5"))));
             Ship nave4 = repository4.save(new Ship(gp2, ShipType.SUBMARINE, new HashSet(Arrays.asList("B5", "C5", "D5"))));
@@ -110,7 +110,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
             repository5.save(new Salvo(gp3, 1, new HashSet(Arrays.asList("A2", "A4", "G6"))));
             repository5.save(new Salvo(gp3, 2, new HashSet(Arrays.asList("A3", "H6"))));
             repository5.save(new Salvo(gp4, 1, new HashSet(Arrays.asList("B5", "D5", "C7"))));
-            repository5.save(new Salvo(gp4, 2, new HashSet(Arrays.asList("C5", "C6"))));
+            repository5.save(new Salvo(gp4, 2, new HashSet(Arrays.asList("C5", "C6"))));*/
             repository6.save(new Score(gp1.getGameID(), gp1.getPlayerID(), 1));
             repository6.save(new Score(gp2.getGameID(), gp2.getPlayerID(), 0));
             repository6.save(new Score(gp3.getGameID(), gp3.getPlayerID(), 0.5));

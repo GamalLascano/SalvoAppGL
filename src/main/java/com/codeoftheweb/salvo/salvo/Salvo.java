@@ -19,7 +19,7 @@ public class Salvo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gamePlayer_id")
     private GamePlayer gamePlayerID;
-    private int turn;
+    private int turn = 0;
     @ElementCollection
     @Column(name = "cell")
     @JsonProperty("locations")
@@ -43,7 +43,9 @@ public class Salvo {
     public int getTurn() {
         return turn;
     }
-
+    public void setTurn(int turn){
+        this.turn = turn;
+    }
     public void setNewGamePlayer(GamePlayer gamePlayerID) {
         this.gamePlayerID = gamePlayerID;
     }
@@ -51,7 +53,9 @@ public class Salvo {
     public Set<String> getSalvoLocations() {
         return locations;
     }
-
+    public void setSalvoLocations(Set<String> locations) {
+        this.locations = locations;
+    }
     public Map<String, Object> toFinalSalvoDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", turn);

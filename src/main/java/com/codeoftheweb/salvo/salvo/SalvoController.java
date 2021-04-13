@@ -2,17 +2,14 @@ package com.codeoftheweb.salvo.salvo;
 
 import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.codeoftheweb.salvo.gameplayer.GamePlayerRepository;
-import com.codeoftheweb.salvo.ship.Ship;
 import com.codeoftheweb.salvo.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,12 +31,18 @@ public class SalvoController {
             Optional<GamePlayer> gp = gamePlayerRepository.findById(gamePlayerId);
             if(gp.isPresent()){
                 if(authentication.getName().compareTo(gp.get().getPlayerID().getUserName()) == 0){
-                    if(!gp.get().HasSalvo(salvo)){
-                        salvo.setNewGamePlayer(gp.get());
-                        salvoRepository.save(salvo);
-                        response = new ResponseEntity<>(Utils.makeMap("OK", "Salvo placed"), HttpStatus.CREATED);
+                    Optional<GamePlayer> enemy = gp.get().getGameID().getGamePlayers().stream().filter(p -> p.getId() != gp.get().getId()).findFirst();
+                    if(enemy.isPresent()){
+                        if(gp.get().getSalvos().size()<=enemy.get().getSalvos().size()){
+                            salvo.setNewGamePlayer(gp.get());
+                            salvo.setTurn(gp.get().getSalvos().size()+1);
+                            salvoRepository.save(salvo);
+                            response = new ResponseEntity<>(Utils.makeMap("OK", "Salvo placed"), HttpStatus.CREATED);
+                        }else{
+                            response = new ResponseEntity<>(Utils.makeMap("error", "It is not your turn yet"), HttpStatus.FORBIDDEN);
+                        }
                     }else{
-                        response = new ResponseEntity<>(Utils.makeMap("error", "Salvos are already placed this turn"), HttpStatus.FORBIDDEN);
+                        response = new ResponseEntity<>(Utils.makeMap("error", "Enemy is not present"), HttpStatus.FORBIDDEN);
                     }
                 }else{
                     response = new ResponseEntity<>(Utils.makeMap("error", "Player is not authorized"), HttpStatus.UNAUTHORIZED);
@@ -52,5 +55,4 @@ public class SalvoController {
         }
         return response;
     }
-
 }

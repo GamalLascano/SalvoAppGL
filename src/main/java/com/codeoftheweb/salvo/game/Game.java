@@ -37,7 +37,9 @@ public class Game {
     public List<Player> getPlayers() {
         return players.stream().map(pla -> pla.getPlayerID()).collect(Collectors.toList());
     }
-
+    public Set<GamePlayer> getGamePlayers(){
+        return players;
+    }
     public void addGamePlayers(GamePlayer gamePla) {
         players.add(gamePla);
     }
