@@ -24,7 +24,7 @@ public class SalvoController {
         return Utils.makeMap("salvos", gamePlayerRepository.getOne(gamePlayerId).getSalvos().stream().map(a -> a.toFinalSalvoDTO()).collect(Collectors.toList()));
     }
 
-    @PostMapping("/games/players/{gamePlayerId}/salvos")
+    @PostMapping("/games/players/{gamePlayerId}/salvoes")
     public ResponseEntity<Map<String, Object>> postSalvos(@PathVariable Long gamePlayerId, @RequestBody Salvo salvo, Authentication authentication) {
         ResponseEntity<Map<String, Object>> response;
         if(!Utils.isGuest(authentication)){
@@ -33,13 +33,17 @@ public class SalvoController {
                 if(authentication.getName().compareTo(gp.get().getPlayerID().getUserName()) == 0){
                     Optional<GamePlayer> enemy = gp.get().getGameID().getGamePlayers().stream().filter(p -> p.getId() != gp.get().getId()).findFirst();
                     if(enemy.isPresent()){
-                        if(gp.get().getSalvos().size()<=enemy.get().getSalvos().size()){
-                            salvo.setNewGamePlayer(gp.get());
-                            salvo.setTurn(gp.get().getSalvos().size()+1);
-                            salvoRepository.save(salvo);
-                            response = new ResponseEntity<>(Utils.makeMap("OK", "Salvo placed"), HttpStatus.CREATED);
+                        if(gp.get().getGameID().getScores().size()==0){
+                            if(gp.get().getSalvos().size()<=enemy.get().getSalvos().size()){
+                                salvo.setNewGamePlayer(gp.get());
+                                salvo.setTurn(gp.get().getSalvos().size()+1);
+                                salvoRepository.save(salvo);
+                                response = new ResponseEntity<>(Utils.makeMap("OK", "Salvo placed"), HttpStatus.CREATED);
+                            }else{
+                                response = new ResponseEntity<>(Utils.makeMap("error", "It is not your turn yet"), HttpStatus.FORBIDDEN);
+                            }
                         }else{
-                            response = new ResponseEntity<>(Utils.makeMap("error", "It is not your turn yet"), HttpStatus.FORBIDDEN);
+                            response = new ResponseEntity<>(Utils.makeMap("error", "Game is over"), HttpStatus.FORBIDDEN);
                         }
                     }else{
                         response = new ResponseEntity<>(Utils.makeMap("error", "Enemy is not present"), HttpStatus.FORBIDDEN);

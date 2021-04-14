@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Ship {
@@ -56,7 +57,7 @@ public class Ship {
     public Map<String,Object> toShipDTO(){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("type",this.type);
-        dto.put("locations",this.locations);
+        dto.put("locations",this.locations.stream().sorted().collect(Collectors.toList()));
         return dto;
     }
 

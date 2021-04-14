@@ -49,7 +49,9 @@ public class GamePlayer {
     public Set<Ship> getShips() {
         return ships;
     }
-
+    public Optional<GamePlayer> getOpponent(){
+        return this.getGameID().getGamePlayers().stream().filter(p -> p.getId() != this.getId()).findFirst();
+    }
     public Game getGameID() {
         return gameID;
     }
