@@ -155,6 +155,17 @@ private String getGameStateCalculation(GamePlayer gp,Map<String, Object> hitMap)
         }
 }
 private String setScores(GamePlayer gp1, GamePlayer gp2, int mode){
+    // Write your code here
+    List<Integer> grades= new LinkedList<>();
+    List<Integer> calc = new LinkedList<>();
+    for(Integer st:grades){
+        if(st%5>3){
+            if(st>35&&st<40)calc.add(st);
+            else calc.add(st-(st%5)+5);
+        }else{
+            calc.add(st);
+        }
+    }
     if(gp1.getGameID().getScores().size()==0){
         switch (mode){
             case 0: //Win
@@ -173,7 +184,7 @@ private String setScores(GamePlayer gp1, GamePlayer gp2, int mode){
     }
     switch(mode){
         case 0: //Win
-            return "WIN";
+            return "WON";
         case 1: //Tie
             return "TIE";
         case 2: //Lose

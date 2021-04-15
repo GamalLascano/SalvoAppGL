@@ -163,12 +163,12 @@ function updateView() {
             $('#currentPlayer').text(data.player);
             $('#logout-form').hide("slow");
             $('#login-form').show("slow");
-
+            $("#createGame").hide();
         } else {
             $('#currentPlayer').text(data.player.email);
             $('#login-form').hide("slow");
             $('#logout-form').show("slow");
-
+            $("#createGame").show();
         }
 }
 
