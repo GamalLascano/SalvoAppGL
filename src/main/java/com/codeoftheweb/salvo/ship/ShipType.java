@@ -2,6 +2,9 @@ package com.codeoftheweb.salvo.ship;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * This enum includes all the ship types, and the length of each ship
+ */
 public enum ShipType {
     @JsonProperty("carrier")
     CARRIER(0),

@@ -5,13 +5,13 @@ import com.codeoftheweb.salvo.gameplayer.GamePlayer;
 import com.codeoftheweb.salvo.score.Score;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class stores the info for the player, like the user name, the games that it's in, the scores and the password
+ */
 @Entity
 public class Player {
 
@@ -54,22 +54,19 @@ public class Player {
         this.password = password;
     }
 
+    /**
+     * This function will retrieve the score linked to this player and the game passed by parameter
+     * @param gamePar The game where that score is saved
+     * @return An optional score
+     */
     public Optional<Score> getScore(Game gamePar) {
         return scores.stream().filter(a -> a.getGame().equals(gamePar)).findFirst();
     }
 
-    /*    public Map<String,Object> makeScores(){
-            Map<String,Object> res = new LinkedHashMap<String, Object>();
-            int win=(int)scores.stream().filter(a->a.getScore()==1.0).count();
-            int loss=(int)scores.stream().filter(a->a.getScore()==0).count();
-            int draw=(int)scores.stream().filter(a->a.getScore()==0.5).count();
-            double count = scores.stream().mapToDouble(Score::getScore).sum();
-            res.put("wins",win);
-            res.put("losses",loss);
-            res.put("draws",draw);
-            res.put("total",count);
-            return res;
-        }*/
+    /**
+     * This function will add a game player to this player
+     * @param gamePla The required game player
+     */
     public void addGamePlayers(GamePlayer gamePla) {
         games.add(gamePla);
     }
@@ -79,6 +76,10 @@ public class Player {
         return games.stream().map(pla -> pla.getGameID()).collect(Collectors.toList());
     }
 
+    /**
+     * Returns the relevant info of a player in a map, requiered to send as a json object to the front end
+     * @return A map containing the id and the email(username) of this player
+     */
     public Map<String, Object> toPlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.id);

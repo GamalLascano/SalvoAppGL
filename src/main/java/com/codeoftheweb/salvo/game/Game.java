@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class has all the information required to carry out a game, like the players and the score.
+ */
 @Entity
 public class Game {
     @Id
@@ -52,6 +55,10 @@ public class Game {
         return id;
     }
 
+    /**
+     * This method will make a map containing various game data, like the id, the creation date, the game players with their info and the scores, if present
+     * @return The map with that info
+     */
     public Map<String, Object> toDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.id);
@@ -65,6 +72,10 @@ public class Game {
         return dto;
     }
 
+    /**
+     * This method will make a map of all the salvo's that are in the player's playing this game
+     * @return A list with said data
+     */
     public List<Object> toSalvoDTO() {
         List<Object> aux = players.stream().flatMap(a -> a.getSalvos().stream().map(b -> b.toFinalSalvoDTO())).collect(Collectors.toList());
         return aux;

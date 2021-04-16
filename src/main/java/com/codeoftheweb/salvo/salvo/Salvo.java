@@ -10,6 +10,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This class will contain all the actions performed in a turn by an user, like the turn and the locations shot
+ */
 @Entity
 public class Salvo {
     @Id
@@ -56,6 +59,11 @@ public class Salvo {
     public void setSalvoLocations(Set<String> locations) {
         this.locations = locations;
     }
+
+    /**
+     * This function will return the turn, player and locations of this salvo
+     * @return Said info in a map
+     */
     public Map<String, Object> toFinalSalvoDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", turn);

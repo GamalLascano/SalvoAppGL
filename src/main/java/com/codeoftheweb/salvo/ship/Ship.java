@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class includes all the info relevant for a ship, like the game player, the ship type and the location of the ship
+ */
 @Entity
 public class Ship {
     @Id
@@ -54,6 +57,10 @@ public class Ship {
         this.locations = locations;
     }
 
+    /**
+     * This method includes all the relevant ship information, including the type and the position of the ship
+     * @return A map with said info
+     */
     public Map<String,Object> toShipDTO(){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("type",this.type);

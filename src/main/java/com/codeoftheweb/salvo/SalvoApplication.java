@@ -49,6 +49,13 @@ public class SalvoApplication extends SpringBootServletInitializer {
         SpringApplication.run(SalvoApplication.class, args);
     }
 
+    /**
+     * This function will initialize the database with some data for the game, players and game players of the games
+     * @param repository1 The player repository
+     * @param repository2 The game repository
+     * @param repository3 The Game Player repository
+     * @return Execute the function inside the lambda
+     */
     @Bean
     public CommandLineRunner initData(PlayerRepository repository1, GameRepository repository2, GamePlayerRepository repository3) {
         return (args) -> {
@@ -103,6 +110,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
     }
 }
 
+/**
+ * This class will configure the user login
+ */
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     @Autowired
@@ -122,6 +132,9 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     }
 }
 
+/**
+ *  This class configures the login and website permissions.
+ */
 @EnableWebSecurity
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {

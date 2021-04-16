@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This class will contain a certain game's score for a certain user and a certain game
+ */
 @Entity
 public class Score {
     @Id

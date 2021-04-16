@@ -12,6 +12,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * The GamePlayer class has everything needed to link a game and a player. Includes creationdate, game, player and it's ships and salvos
+ */
 @Entity
 public class GamePlayer {
     @Id
@@ -40,15 +43,15 @@ public class GamePlayer {
         this.gameID = gameID;
         this.playerID = playerID;
     }
-    public boolean HasSalvo(Salvo salvo){
-        for(Salvo salvoInList : salvos){
-            if(salvoInList.getTurn() == salvo.getTurn())return true;
-        }
-        return false;
-    }
+
     public Set<Ship> getShips() {
         return ships;
     }
+
+    /**
+     * Returns the opponent for this game player
+     * @return An optional opponent for this player
+     */
     public Optional<GamePlayer> getOpponent(){
         return this.getGameID().getGamePlayers().stream().filter(p -> p.getId() != this.getId()).findFirst();
     }
@@ -68,7 +71,12 @@ public class GamePlayer {
         return id;
     }
 
+    /**
+     * This method will return the score of this game player, if it exists
+     * @return The score of this game player
+     */
     public Optional<Score> getScore() {
+        //This function will look through the scores of the game and fill the score with the player id that matches the one in this gameplayer's player
         return gameID.getScores().stream().filter(a -> a.getPlayer().getId() == this.playerID.getId()).findFirst();
     }
 
